@@ -1,17 +1,21 @@
-package com.example.homework_10;
+package com.example.homework_10.ui;
 
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.homework_10.R;
+import com.example.homework_10.repository.NoteDate;
+import com.example.homework_10.repository.NoteSource;
+
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder> {
 
-    private String[] data;
+    private NoteSource noteSource;
 
     OnItemClickListener onItemClickListener;
 
@@ -19,13 +23,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setData(String[] data) {
-        this.data = data;
+    public void setData(NoteSource noteSource) {
+        this.noteSource = noteSource;
         notifyDataSetChanged(); // команда адаптеру отрисовать все полученные данные
     }
 
-    public NotesAdapter(String[] data) {
-        this.data = data;
+    public NotesAdapter(NoteSource noteSource) {
+
+        this.noteSource = noteSource;
     }
 
     public NotesAdapter() {
@@ -37,38 +42,44 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 
-        return new MyViewHolder(layoutInflater.inflate(R.layout.fragment_notes_recycler_item, parent, false));
+        return new MyViewHolder(layoutInflater.inflate(R.layout.fragment_notes_cardview_item, parent, false));
     }
 
     @Override
     // метод связывает ViewHolder с контентом
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.bindContentWithLayout(data[position]);
+        holder.bindContentWithLayout(noteSource.getNoteDate(position));
     }
 
     @Override
     public int getItemCount() { //размер массива с которым будет работать Adapter
-        return data.length;
+
+        return noteSource.size();
     }
 
     // кастомный ViewHolder (управляет макетом)
     class MyViewHolder extends RecyclerView.ViewHolder{
-        private TextView textView;
+        private TextView textViewNameNotes;
+        private TextView textViewDescription;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = (TextView) itemView;
-            textView.setOnClickListener(new View.OnClickListener() {
+            textViewNameNotes = (TextView) itemView.findViewById(R.id.name_notes);
+            textViewDescription = (TextView) itemView.findViewById(R.id.description);
+       /*     textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(onItemClickListener!=null){
                         onItemClickListener.onItemClick(getLayoutPosition());
                     }
                 }
-            });
+            });*/
         }
             // Метод связывает контент с макетом
-        public void bindContentWithLayout(String content){
-            textView.setText(content);
+        public void bindContentWithLayout(NoteDate content){
+
+            textViewNameNotes.setText(content.getName_note());
+            textViewDescription.setText(content.getDescriptions());
         }
 
     }

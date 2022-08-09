@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="name_note">
-        <item>First_Note</item>
-        <item>Second_Note</item>
-        <item>third_Note</item>
+    <string-array name="name_notes">
+        <item>Первая заметка</item>
+        <item>Вторая заметка</item>
+        <item>Третья заметка</item>
+        <item>Четвертая заметка</item>
+        <item>Пятая заметка</item>
+        <item>Шестая заметка</item>
+        <item>Седьмая заметка</item>
+        <item>Восьмая заметка</item>
+        <item>Девятая заметка</item>
+    </string-array>
+
+    <string-array name="descriptions">
+        <item>Описание первой заметки</item>
+        <item>Описание второй заметки</item>
+        <item>Описание третьей заметки</item>
+        <item>Описание четвертой заметки</item>
+        <item>Описание пятой заметки</item>
+        <item>Описание шестой заметки</item>
+        <item>Описание седьмой заметки</item>
+        <item>Описание восьмой заметки</item>
+        <item>Описание девятой заметки</item>
     </string-array>
 
 </resources>

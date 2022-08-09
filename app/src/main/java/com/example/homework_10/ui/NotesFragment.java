@@ -1,4 +1,4 @@
-package com.example.homework_10;
+package com.example.homework_10.ui;
 
 import android.os.Bundle;
 
@@ -11,6 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.example.homework_10.R;
+import com.example.homework_10.repository.LocalRepositoryImpl;
 
 public class NotesFragment extends Fragment implements OnItemClickListener {
 
@@ -39,7 +42,8 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
 
     void initAdapter(){
         notesAdapter = new NotesAdapter();
-        notesAdapter.setData(getData());
+        LocalRepositoryImpl localRepositoryImpl = new LocalRepositoryImpl(requireContext().getResources());
+        notesAdapter.setData(localRepositoryImpl.init());
         notesAdapter.setOnItemClickListener(NotesFragment.this);
     }
 
@@ -51,7 +55,7 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
     }
 
     String[] getData(){
-        String[] data = getResources().getStringArray(R.array.name_note);
+        String[] data = getResources().getStringArray(R.array.name_notes);
         return data;
     }
 
