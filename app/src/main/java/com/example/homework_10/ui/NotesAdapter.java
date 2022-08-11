@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.homework_10.R;
@@ -17,6 +18,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
     private NotesSource notesSource;
 
     OnItemClickListener onItemClickListener;
+
+    Fragment fragment;
+
+    private int menuPosition;
+
+    public int getMenuPosition() {
+        return menuPosition;
+    }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
@@ -33,6 +42,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
     }
 
     public NotesAdapter() {
+    }
+
+    public NotesAdapter(Fragment fragment) {
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -65,14 +78,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
             super(itemView);
             textViewNameNotes = (TextView) itemView.findViewById(R.id.name_notes);
             textViewDescription = (TextView) itemView.findViewById(R.id.description);
-       /*     textView.setOnClickListener(new View.OnClickListener() {
+
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View view) {
-                    if(onItemClickListener!=null){
-                        onItemClickListener.onItemClick(getLayoutPosition());
-                    }
+                public boolean onLongClick(View view) {
+                    menuPosition = getLayoutPosition();
+                    return false;
                 }
-            });*/
+            });
+            fragment.registerForContextMenu(itemView);
         }
             // Метод связывает контент с макетом
         public void bindContentWithLayout(NoteData content){

@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,7 +56,7 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_add:{
-                data.addNotesData(new NoteData("Заголовок новой карточки " + data.size(), "Описание новой карточки " + data.size()));
+                data.addNotesData(new NoteData("Заголовок новой заметки " + data.size(), "Описание новой заметки " + data.size()));
                 notesAdapter.notifyItemInserted(data.size() -1);
                 return true;
             }
@@ -69,8 +70,34 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        requireActivity().getMenuInflater().inflate(R.menu.note_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int menuPosition = notesAdapter.getMenuPosition();
+        switch (item.getItemId()){
+            case R.id.action_update:{
+                data.updateNoteData(menuPosition, new NoteData("Заголовок обновленной заметки " + data.size(), "Описание обновленной заметки " + data.size()));
+                notesAdapter.notifyItemChanged(menuPosition);
+                return true;
+            }
+            case R.id.action_delete:{
+                data.deleteNoteData(menuPosition);
+                notesAdapter.notifyItemRemoved(menuPosition);
+                return true;
+            }
+        }
+        return super.onContextItemSelected(item);
+    }
+
+
+
     void initAdapter(){
-        notesAdapter = new NotesAdapter();
+        notesAdapter = new NotesAdapter(this);
         data = new LocalRepositoryImpl(requireContext().getResources()).init();
         notesAdapter.setData(data);
         notesAdapter.setOnItemClickListener(NotesFragment.this);
