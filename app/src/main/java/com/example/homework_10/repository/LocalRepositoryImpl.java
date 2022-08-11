@@ -7,13 +7,13 @@ import com.example.homework_10.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocalRepositoryImpl implements NoteSource{
+public class LocalRepositoryImpl implements NotesSource {
 
-    private List<NoteDate> noteSource;
+    private List<NoteData> noteSource;
     private Resources resources;
 
     public LocalRepositoryImpl(Resources resources){
-        noteSource = new ArrayList<NoteDate>();
+        noteSource = new ArrayList<NoteData>();
         this.resources = resources;
     }
 
@@ -22,7 +22,7 @@ public class LocalRepositoryImpl implements NoteSource{
         String[] descriptions = resources.getStringArray(R.array.descriptions);
 
         for(int i = 0; i<name_notes.length; i++){
-            noteSource.add(new NoteDate(name_notes[i], descriptions[i]));
+            noteSource.add(new NoteData(name_notes[i], descriptions[i]));
         }
         return this;
     }
@@ -33,12 +33,32 @@ public class LocalRepositoryImpl implements NoteSource{
     }
 
     @Override
-    public List<NoteDate> getAllNotesDate() {
+    public List<NoteData> getAllNotesData() {
         return noteSource;
     }
 
     @Override
-    public NoteDate getNoteDate(int position) {
+    public NoteData getNoteData(int position) {
         return noteSource.get(position);
+    }
+
+    @Override
+    public void clearNotesData() {
+        noteSource.clear();
+    }
+
+    @Override
+    public void addNotesData(NoteData noteData) {
+        noteSource.add(noteData);
+    }
+
+    @Override
+    public void deleteNoteData(int position) {
+        noteSource.remove(position);
+    }
+
+    @Override
+    public void updateNoteData(int position, NoteData newNoteData) {
+        noteSource.set(position, newNoteData);
     }
 }

@@ -3,19 +3,18 @@ package com.example.homework_10.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.homework_10.R;
-import com.example.homework_10.repository.NoteDate;
-import com.example.homework_10.repository.NoteSource;
+import com.example.homework_10.repository.NoteData;
+import com.example.homework_10.repository.NotesSource;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder> {
 
-    private NoteSource noteSource;
+    private NotesSource notesSource;
 
     OnItemClickListener onItemClickListener;
 
@@ -23,14 +22,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setData(NoteSource noteSource) {
-        this.noteSource = noteSource;
+    public void setData(NotesSource notesSource) {
+        this.notesSource = notesSource;
         notifyDataSetChanged(); // команда адаптеру отрисовать все полученные данные
     }
 
-    public NotesAdapter(NoteSource noteSource) {
+    public NotesAdapter(NotesSource notesSource) {
 
-        this.noteSource = noteSource;
+        this.notesSource = notesSource;
     }
 
     public NotesAdapter() {
@@ -48,13 +47,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
     @Override
     // метод связывает ViewHolder с контентом
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.bindContentWithLayout(noteSource.getNoteDate(position));
+        holder.bindContentWithLayout(notesSource.getNoteData(position));
     }
 
     @Override
     public int getItemCount() { //размер массива с которым будет работать Adapter
 
-        return noteSource.size();
+        return notesSource.size();
     }
 
     // кастомный ViewHolder (управляет макетом)
@@ -76,7 +75,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
             });*/
         }
             // Метод связывает контент с макетом
-        public void bindContentWithLayout(NoteDate content){
+        public void bindContentWithLayout(NoteData content){
 
             textViewNameNotes.setText(content.getName_note());
             textViewDescription.setText(content.getDescriptions());
