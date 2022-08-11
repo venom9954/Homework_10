@@ -56,10 +56,13 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
         switch (item.getItemId()){
             case R.id.action_add:{
                 data.addNotesData(new NoteData("Заголовок новой карточки " + data.size(), "Описание новой карточки " + data.size()));
-                notesAdapter.notifyDataSetChanged();
+                notesAdapter.notifyItemInserted(data.size() -1);
+                return true;
             }
             case R.id.action_clear:{
-
+                data.clearNotesData();
+                notesAdapter.notifyDataSetChanged();
+                return true;
             }
         }
 
