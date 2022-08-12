@@ -1,4 +1,4 @@
-package com.example.homework_10.ui;
+package com.example.homework_10.ui.main;
 
 import android.os.Bundle;
 
@@ -17,14 +17,20 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.homework_10.R;
+import com.example.homework_10.publisher.Observer;
 import com.example.homework_10.repository.LocalRepositoryImpl;
 import com.example.homework_10.repository.NoteData;
 import com.example.homework_10.repository.NotesSource;
+import com.example.homework_10.ui.MainActivity;
+import com.example.homework_10.ui.editor.NoteFragment;
+
+import java.util.Calendar;
 
 public class NotesFragment extends Fragment implements OnItemClickListener {
 
     NotesAdapter notesAdapter;
     NotesSource data;
+    RecyclerView recyclerView;
 
     public static NotesFragment newInstance() {
         NotesFragment fragment = new NotesFragment();
@@ -56,8 +62,9 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_add:{
-                data.addNotesData(new NoteData("Заголовок новой заметки " + data.size(), "Описание новой заметки " + data.size()));
+                data.addNotesData(new NoteData("Заголовок новой заметки " + data.size(), "Описание новой заметки " + data.size(), Calendar.getInstance().getTime()));
                 notesAdapter.notifyItemInserted(data.size() -1);
+                recyclerView.smoothScrollToPosition(data.size() -1);
                 return true;
             }
             case R.id.action_clear:{
@@ -80,9 +87,17 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         int menuPosition = notesAdapter.getMenuPosition();
         switch (item.getItemId()){
-            case R.id.action_update:{
-                data.updateNoteData(menuPosition, new NoteData("Заголовок обновленной заметки " + data.size(), "Описание обновленной заметки " + data.size()));
-                notesAdapter.notifyItemChanged(menuPosition);
+            case R.id.action_update: {
+                Observer observer = new Observer() {
+                    @Override
+                    public void receiveMessage(NoteData noteData) {
+                        ((MainActivity) requireActivity()).getPublisher().unsubscribe(this);
+                        data.updateNoteData(menuPosition, noteData);
+                        notesAdapter.notifyItemChanged(menuPosition);
+                    }
+                };
+                ((MainActivity) requireActivity()).getPublisher().subscribe(observer);
+                ((MainActivity) requireActivity()).getSupportFragmentManager().beginTransaction().add(R.id.container, NoteFragment.newInstance(data.getNoteData(menuPosition))).addToBackStack("").commit();
                 return true;
             }
             case R.id.action_delete:{
@@ -94,8 +109,6 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
         return super.onContextItemSelected(item);
     }
 
-
-
     void initAdapter(){
         notesAdapter = new NotesAdapter(this);
         data = new LocalRepositoryImpl(requireContext().getResources()).init();
@@ -104,7 +117,7 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
     }
 
     void initRecycler(View view){
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(notesAdapter);
 
@@ -120,4 +133,5 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
         String[] data = getData();
         Toast.makeText(requireContext(), "Нажали на " + data[position], Toast.LENGTH_SHORT).show();
     }
+
 }

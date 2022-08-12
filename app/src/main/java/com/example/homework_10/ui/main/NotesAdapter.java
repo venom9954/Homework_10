@@ -1,4 +1,4 @@
-package com.example.homework_10.ui;
+package com.example.homework_10.ui.main;
 
 import android.view.LayoutInflater;
 import android.view.View;
