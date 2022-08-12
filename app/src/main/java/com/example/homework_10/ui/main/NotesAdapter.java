@@ -93,7 +93,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
         public void bindContentWithLayout(NoteData content){
 
             textViewNameNotes.setText(content.getName_note());
-            textViewDescription.setText(content.getDescriptions());
+            textViewDescription.setText(content.getDescriptions() + " " + content.getDate());
         }
 
     }
