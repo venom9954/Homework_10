@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.homework_10.R;
 import com.example.homework_10.publisher.Observer;
 import com.example.homework_10.repository.LocalRepositoryImpl;
+import com.example.homework_10.repository.LocalSharedPreferencesRepositoryImpl;
 import com.example.homework_10.repository.NoteData;
 import com.example.homework_10.repository.NotesSource;
 import com.example.homework_10.ui.MainActivity;
@@ -89,6 +90,7 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
                         setCurrentSource(SOURCE_GF);
                         break;
                 }
+            setupSource();
         }
     };
 
@@ -108,11 +110,30 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initAdapter();
+        setupSource();
         initRecycler(view);
         setHasOptionsMenu(true);
         initRadioGroup(view);
 
+    }
+
+    void setupSource(){
+        switch (getCurrentSource()){
+            case SOURCE_ARRAY:{
+                data = new LocalRepositoryImpl(requireContext().getResources()).init();
+                initAdapter();
+                break;
+            }
+            case SOURCE_SP:{
+                data = new LocalSharedPreferencesRepositoryImpl(requireContext().getSharedPreferences(LocalSharedPreferencesRepositoryImpl.KEY_SP_2, Context.MODE_PRIVATE)).init();
+                initAdapter();
+                break;
+            }
+            case SOURCE_GF:{
+
+                break;
+            }
+        }
     }
 
     @Override
@@ -173,8 +194,8 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
     }
 
     void initAdapter(){
+        if(notesAdapter==null)
         notesAdapter = new NotesAdapter(this);
-        data = new LocalRepositoryImpl(requireContext().getResources()).init();
         notesAdapter.setData(data);
         notesAdapter.setOnItemClickListener(NotesFragment.this);
     }
