@@ -7,4 +7,7 @@
     <string name="update">Обновить</string>
     <string name="clear">Удалить</string>
     <string name="save">Сохранить</string>
+    <string name="from_array">from Array</string>
+    <string name="from_sp">from SP</string>
+    <string name="from_gf">from GF</string>
 </resources>

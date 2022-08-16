@@ -1,5 +1,7 @@
 package com.example.homework_10.ui.main;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.homework_10.R;
@@ -44,12 +47,72 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
         return inflater.inflate(R.layout.fragment_notes, container, false);
     }
 
+    private void initRadioGroup(View view){
+        view.findViewById(R.id.sourceArrays).setOnClickListener(listener);
+        view.findViewById(R.id.sourceSP).setOnClickListener(listener);
+        view.findViewById(R.id.sourceGF).setOnClickListener(listener);
+
+        switch (getCurrentSource()){
+            case SOURCE_ARRAY:{
+                ((RadioButton)view.findViewById(R.id.sourceArrays)).setChecked(true);
+                break;
+            }
+            case SOURCE_SP:{
+                ((RadioButton)view.findViewById(R.id.sourceSP)).setChecked(true);
+                break;
+            }
+            case SOURCE_GF:{
+                ((RadioButton)view.findViewById(R.id.sourceGF)).setChecked(true);
+                break;
+            }
+        }
+    }
+
+    static final int SOURCE_ARRAY = 1;
+    static final int SOURCE_SP = 2;
+    static final int SOURCE_GF = 3;
+
+    static String KEY_SP_S1 = "key_1";
+    static String KEY_SP_S1_CELL_C1 = "s1_cell";
+
+    View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+                switch (view.getId()){
+                    case R.id.sourceArrays:
+                        setCurrentSource(SOURCE_ARRAY);
+                        break;
+                    case R.id.sourceSP:
+                        setCurrentSource(SOURCE_SP);
+                        break;
+                    case R.id.sourceGF:
+                        setCurrentSource(SOURCE_GF);
+                        break;
+                }
+        }
+    };
+
+    void setCurrentSource(int currentSource){
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences(KEY_SP_S1, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(KEY_SP_S1_CELL_C1, currentSource);
+        editor.apply();
+    }
+
+    int getCurrentSource(){
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences(KEY_SP_S1, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(KEY_SP_S1_CELL_C1, SOURCE_ARRAY);
+    }
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initAdapter();
         initRecycler(view);
         setHasOptionsMenu(true);
+        initRadioGroup(view);
+
     }
 
     @Override

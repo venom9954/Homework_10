@@ -6,8 +6,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.main.NotesFragment">
 
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="?actionBarSize"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/sourceArrays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/from_array">
+
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/sourceSP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/from_sp">
+
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/sourceGF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/from_gf">
+
+        </RadioButton>
+
+    </RadioGroup>
+
 <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recyclerView"
+    android:layout_marginTop="?actionBarSize"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

@@ -2,7 +2,7 @@ package com.example.homework_10.repository;
 
 import java.util.List;
 
-public interface NotesSource {
+public interface NotesSource { //Отвечает за поведение любого источника данных
     int size();
     List<NoteData> getAllNotesData();
     NoteData getNoteData(int position);
