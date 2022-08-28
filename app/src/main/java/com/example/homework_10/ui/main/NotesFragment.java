@@ -25,12 +25,14 @@ import com.example.homework_10.repository.LocalRepositoryImpl;
 import com.example.homework_10.repository.LocalSharedPreferencesRepositoryImpl;
 import com.example.homework_10.repository.NoteData;
 import com.example.homework_10.repository.NotesSource;
+import com.example.homework_10.repository.RemoteFireStoreRepose;
+import com.example.homework_10.repository.RemoteFireStoreRepositoryImpl;
 import com.example.homework_10.ui.MainActivity;
 import com.example.homework_10.ui.editor.NoteFragment;
 
 import java.util.Calendar;
 
-public class NotesFragment extends Fragment implements OnItemClickListener {
+public class NotesFragment extends Fragment implements OnItemClickListener, RemoteFireStoreRepose {
 
     NotesAdapter notesAdapter;
     NotesSource data;
@@ -130,7 +132,8 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
                 break;
             }
             case SOURCE_GF:{
-
+                data = new RemoteFireStoreRepositoryImpl().init(this);
+                initAdapter();
                 break;
             }
         }
@@ -218,4 +221,8 @@ public class NotesFragment extends Fragment implements OnItemClickListener {
         Toast.makeText(requireContext(), "Нажали на " + data[position], Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void initialized(NotesSource notesSource) {
+
+    }
 }
